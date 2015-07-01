@@ -98,8 +98,9 @@ def drawDisk(win, towerHeight, width, x, y):
     ratio = (width*1.0/towerHeight)
     iratio = 1.0-ratio
     color = (int(16+144*iratio), int(96+64*iratio), int(32+32*iratio))
-    drawRect(win, color, x+128*iratio/2, y, 128*ratio,16)
-    texture.get_region(0,0,128*ratio,16).blit(x+128*iratio/2,y)
+    drawRect(win, color, x+128*iratio//2, y, 128*ratio,16)
+    if not texture==False:
+        texture.get_region(128*iratio//2,0,128*ratio,16).blit(x+128*iratio//2,y)
 
 def drawPillar(win, pillar, height, x, y):
     drawRect(win, (32,112,196), x+60, y, 8, 20*height)
@@ -133,7 +134,11 @@ def runInteractive():
     board = HanoiBoard(height)
     glEnable(GL_BLEND)
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA) 
-    texture = pyglet.resource.image("Sandy.png")
+    try:
+        texture = pyglet.resource.image("Sandy.png")
+    except ResourceNotFoundException:
+        print("Sandy.png (the decorative 128x16 image drawn over the disks) is missing.")
+        texture = False
     winx = window.width//2-192
 
     @window.event
@@ -258,7 +263,11 @@ def runStdin():
     board = HanoiBoard(height)
     glEnable(GL_BLEND)
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA) 
-    texture = pyglet.resource.image("Sandy.png")
+    try:
+        texture = pyglet.resource.image("Sandy.png")
+    except ResourceNotFoundException:
+        print("Sandy.png (the decorative 128x16 image drawn over the disks) is missing.")
+        texture = False
     winx = window.width//2-192
     
     def check_for_input(dt):
@@ -280,16 +289,18 @@ def runStdin():
 if "help" in sys.argv or "-help" in sys.argv or "--help" in sys.argv:
     print(__doc__)
 else:
-    inputHeight=sys.argv.index("-h")
+    inputHeight=-1
+    if "-h" in sys.argv:
+        inputHeight=sys.argv.index("-h")
     if inputHeight>=0:
         height=int(sys.argv[inputHeight+1])
-        if "-p" in sys.argv:
-            inputThread=StdinParser()
-            inputThread.start()
-            runStdin()
-            bufferLock.acquire()
-            inputBuffer=False
-            bufferLock.release()
-            print("Exiting Main Thread")
-        else:
-            runInteractive()
+    if "-p" in sys.argv:
+        inputThread=StdinParser()
+        inputThread.start()
+        runStdin()
+        bufferLock.acquire()
+        inputBuffer=False
+        bufferLock.release()
+        print("Exiting Main Thread")
+    else:
+        runInteractive()
