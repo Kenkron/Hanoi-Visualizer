@@ -136,7 +136,7 @@ def runInteractive():
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA) 
     try:
         texture = pyglet.resource.image("Sandy.png")
-    except ResourceNotFoundException:
+    except pyglet.resource.ResourceNotFoundException:
         print("Sandy.png (the decorative 128x16 image drawn over the disks) is missing.")
         texture = False
     winx = window.width//2-192
@@ -265,7 +265,7 @@ def runStdin():
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA) 
     try:
         texture = pyglet.resource.image("Sandy.png")
-    except ResourceNotFoundException:
+    except pyglet.resource.ResourceNotFoundException:
         print("Sandy.png (the decorative 128x16 image drawn over the disks) is missing.")
         texture = False
     winx = window.width//2-192
