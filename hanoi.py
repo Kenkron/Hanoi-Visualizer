@@ -4,6 +4,7 @@ import os
 import pyglet
 from pyglet.gl import *
 import threading
+import signal
     
 height=5
 
@@ -60,9 +61,6 @@ class HanoiBoard:
                 "Tried to put larger disk on smaller disk\n"+
                 "    while moving disk of width "+str(disk)+
                 " to pillar "+str(i))
-    def move(self, start, end):
-        disk = self.pop(start)
-        self.push(end, disk)
 
 
 def drawRect(win, color, x, y, w, h):
@@ -187,7 +185,17 @@ def parseLine(text, board):
         if char in "012":
             numbers.append(int(char))
     if len(numbers)==2:
-        board.move(numbers[0],numbers[1])
+        disk = 0
+        try:
+            disk = board.pop(numbers[0])
+        except EmptyTowerException as e:
+            print("Pillar "+str(numbers[0])+" is empty")
+        if disk>0:
+            try:
+                board.push(numbers[1],disk)
+            except InvertedTowerException as e:
+                print("Cannot move a big disk onto a small disk")
+                board.push(numbers[0],disk)
 
 #creates an input buffer for stdin
 bufferLock=threading.Lock()
@@ -200,13 +208,17 @@ class StdinParser(threading.Thread):
         global inputBuffer
         running = True
         while running:
-            instruction=raw_input()
-            bufferLock.acquire()
-            if not inputBuffer == False:
-                inputBuffer.append(instruction)
-            else:
+            try:
+                instruction=raw_input()
+                bufferLock.acquire()
+                if inputBuffer == False:
+                    running = False
+                else:
+                    inputBuffer.insert(0,instruction)
+                bufferLock.release()
+            except EOFError:
                 running = False
-            bufferLock.release()
+        pyglet.app.exit()
 
 def runStdin():
     """Runs tower of hanoi using input from stdin
@@ -230,6 +242,7 @@ def runStdin():
     winx = window.width//2-192
     
     def check_for_input(dt):
+        print("updating")
         bufferLock.acquire()
         if len(inputBuffer)>0:
             instruction = inputBuffer.pop()
@@ -243,7 +256,10 @@ def runStdin():
         drawBoard(window, board, winx, 64)
     pyglet.clock.schedule_interval(check_for_input, 1)
     pyglet.app.event_loop.run()
-        
+
+inputHeight=sys.argv.index("-h")
+if inputHeight>=0:
+    height=int(sys.argv[inputHeight+1])
 if "-p" in sys.argv:
     inputThread=StdinParser()
     inputThread.start()
