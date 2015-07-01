@@ -1,4 +1,23 @@
 #!/usr/bin/python
+"""
+USAGE: 
+
+    python hanoi.py [OPTIONS] [-h HEIGHT]
+
+OPTIONS:
+
+    help, -help, --help
+        Shows the program docstring (this).
+
+    -h HEIGHT
+        Set the height of the tower (in disks).
+
+    -p
+        Parse instructions from STDIN.  Each instruction must contain two numbers:
+        a source, and a destination in that order.  Other characters don't matter,
+        so "move 0 to 2" == "0 to 2" == "02".  Note that the pillars are numbered
+        0-2 from left to right.
+"""
 import sys
 import os
 import pyglet
@@ -185,16 +204,17 @@ def parseLine(text, board):
         if char in "012":
             numbers.append(int(char))
     if len(numbers)==2:
+        print("moving from "+str(numbers[0])+" to "+str(numbers[1]))
         disk = 0
         try:
             disk = board.pop(numbers[0])
         except EmptyTowerException as e:
-            print("Pillar "+str(numbers[0])+" is empty")
+            print("ERROR: Pillar "+str(numbers[0])+" is empty")
         if disk>0:
             try:
                 board.push(numbers[1],disk)
             except InvertedTowerException as e:
-                print("Cannot move a big disk onto a small disk")
+                print("ERROR: Cannot move a big disk onto a small disk")
                 board.push(numbers[0],disk)
 
 #creates an input buffer for stdin
@@ -242,7 +262,6 @@ def runStdin():
     winx = window.width//2-192
     
     def check_for_input(dt):
-        print("updating")
         bufferLock.acquire()
         if len(inputBuffer)>0:
             instruction = inputBuffer.pop()
@@ -257,16 +276,20 @@ def runStdin():
     pyglet.clock.schedule_interval(check_for_input, 1)
     pyglet.app.event_loop.run()
 
-inputHeight=sys.argv.index("-h")
-if inputHeight>=0:
-    height=int(sys.argv[inputHeight+1])
-if "-p" in sys.argv:
-    inputThread=StdinParser()
-    inputThread.start()
-    runStdin()
-    bufferLock.acquire()
-    inputBuffer=False
-    bufferLock.release()
-    print("Exiting Main Thread")
+
+if "help" in sys.argv or "-help" in sys.argv or "--help" in sys.argv:
+    print(__doc__)
 else:
-    runInteractive()
+    inputHeight=sys.argv.index("-h")
+    if inputHeight>=0:
+        height=int(sys.argv[inputHeight+1])
+        if "-p" in sys.argv:
+            inputThread=StdinParser()
+            inputThread.start()
+            runStdin()
+            bufferLock.acquire()
+            inputBuffer=False
+            bufferLock.release()
+            print("Exiting Main Thread")
+        else:
+            runInteractive()
