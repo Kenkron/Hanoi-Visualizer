@@ -204,8 +204,6 @@ class StdinParser(threading.Thread):
             bufferLock.acquire()
             if not inputBuffer == False:
                 inputBuffer.append(instruction)
-                print("input buffer has " + str(len(inputBuffer)) + 
-                      " commands")
             else:
                 running = False
             bufferLock.release()
@@ -231,19 +229,19 @@ def runStdin():
     texture = pyglet.resource.image("Sandy.png")
     winx = window.width//2-192
     
-    @window.event
-    def on_draw():
-        print("Draw Thread Locking Buffer")
+    def check_for_input(dt):
         bufferLock.acquire()
         if len(inputBuffer)>0:
             instruction = inputBuffer.pop()
             parseLine(instruction,board)
-            print(instruction)
         bufferLock.release()
-        print("Draw Thread Unlocked Buffer")
+
+    @window.event
+    def on_draw():
         window.clear()
         label.draw()
         drawBoard(window, board, winx, 64)
+    pyglet.clock.schedule_interval(check_for_input, 1)
     pyglet.app.event_loop.run()
         
 if "-p" in sys.argv:
