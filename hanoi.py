@@ -241,7 +241,7 @@ class StdinParser(threading.Thread):
         running = True
         while running:
             try:
-                instruction=sys.stdin.readline()
+                instruction=raw_input()
                 bufferLock.acquire()
                 if inputBuffer == False:
                     running = False
@@ -250,7 +250,6 @@ class StdinParser(threading.Thread):
                 bufferLock.release()
             except EOFError:
                 running = False
-        pyglet.app.exit()
 
 def runStdin():
     """Runs tower of hanoi using input from stdin
@@ -301,6 +300,12 @@ def runStdin():
         pyglet.clock.schedule_interval(check_for_input, moveTime)
     pyglet.app.event_loop.run()
 
+def gracefulExit(signal, frame):
+    print("stopping buffer")
+    bufferLock.acquire()
+    inputBuffer=False
+    bufferLock.release()
+signal.signal(signal.SIGINT, gracefulExit)
 
 if "help" in sys.argv or "-help" in sys.argv or "--help" in sys.argv:
     print(__doc__)
