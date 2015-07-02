@@ -2,13 +2,12 @@ Tower of Hanoi Game
 ===================
 
 This is a python visualization of 
-[Tower of Hanoi](https://en.wikipedia.org/wiki/Tower_of_Hanoi).  
+[Tower of Hanoi](https://en.wikipedia.org/wiki/Tower_of_Hanoi).
 In this game, there is a stack of disks on one of three pillars. The disks are 
 large at the bottom, and get smaller towards the top. The goal is to move the 
 disks to a different pillar following two rules:
 
 1. You may only move one disk at a time
-
 2. You may never put a larger disk on top of a smaller disk
 
 For more information, run:
