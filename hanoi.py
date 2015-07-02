@@ -10,13 +10,16 @@ OPTIONS:
         Shows the program docstring (this).
 
     -h HEIGHT
-        Set the height of the tower (in disks).
+        Set the height of the tower (default 5).
 
     -p
         Parse instructions from STDIN.  Each instruction must contain two numbers:
         a source, and a destination in that order.  Other characters don't matter,
         so "move 0 to 2" == "0 to 2" == "02".  Note that the pillars are numbered
         0-2 from left to right.
+
+    -t WAIT_TIME
+        Sets the delay between updates whan reading from STDIN (default 1)
 """
 import sys
 import os
@@ -25,7 +28,10 @@ from pyglet.gl import *
 import threading
 import signal
     
+#height of the tower
 height=5
+#time between each move in stdin mdoe
+moveTime=1
 
 class EmptyTowerException(Exception):
     """Error: Tried to remove a disk from and empty pillar"""
@@ -273,7 +279,7 @@ def runStdin():
         window.clear()
         label.draw()
         drawBoard(window, board, winx, 64)
-    pyglet.clock.schedule_interval(check_for_input, 1)
+    pyglet.clock.schedule_interval(check_for_input, moveTime)
     pyglet.app.event_loop.run()
 
 
@@ -286,6 +292,8 @@ else:
     if inputHeight>=0:
         height=int(sys.argv[inputHeight+1])
     if "-p" in sys.argv:
+        if "-t" in sys.argv:
+            moveTime=float(sys.argv[sys.argv.index("-t")+1])
         inputThread=StdinParser()
         inputThread.start()
         runStdin()
