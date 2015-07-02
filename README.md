@@ -14,9 +14,6 @@ For more information, run:
 
     python hanoi.py help
 
-Also, this program uses [pyglet](https://bitbucket.org/pyglet/pyglet/wiki/Home), which
-you'll need to install (`pip install pyglet`)
-
 Features include:
 
  * Interactive Mode (where you move the pieces with a mouse)
@@ -25,6 +22,14 @@ Features include:
  * Decorative disk image
  * Helpful help messages
  * Occasional documentation
+
+If you have a program that prints instructions for solving Tower of Hanoi, 
+and you want to see it in action before your very eyes, now is your chance!
+
+    python my_awesome_hanoi_solver.py | python hanoi.py -p
+
+This program uses [pyglet](https://bitbucket.org/pyglet/pyglet/wiki/Home), which
+you'll need to install (`pip install pyglet` in bash/powershell should do it)
 
 Features may someday include:
 
