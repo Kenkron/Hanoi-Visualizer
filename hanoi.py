@@ -20,6 +20,9 @@ OPTIONS:
 
     -t WAIT_TIME
         Sets the delay between updates whan reading from STDIN (default 1)
+
+    -f
+        Forces execution, even when it will take longer than a minute
 """
 import sys
 import os
@@ -27,6 +30,7 @@ import pyglet
 from pyglet.gl import *
 import threading
 import signal
+import time
     
 #height of the tower
 height=5
@@ -294,8 +298,14 @@ else:
     if "-p" in sys.argv:
         if "-t" in sys.argv:
             moveTime=float(sys.argv[sys.argv.index("-t")+1])
+        timeToCompletion = moveTime*(2**height-1)
         inputThread=StdinParser()
         inputThread.start()
+        if timeToCompletion>60 and not "-f" in sys.argv:
+            print("Aboriting. This will take at least "+str(timeToCompletion)+
+                  " seconds to complete. Use -f to force completion anyway.")
+            inputBuffer=False
+            sys.exit()
         runStdin()
         bufferLock.acquire()
         inputBuffer=False
