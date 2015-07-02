@@ -43,7 +43,7 @@ I'm mostly making this as an educational tool. When I learned recursion, I was
 told to make a fibonacci function, and was forbade from using loops for a few
 months. As a result, recursion  (outside of tree traversal) looked like a 
 stupid, inefficient technique used by those who congradulate themselves for 
-using cryptic coding that newbies might not understand.
+cryptic coding that newbies might not understand.
 
 Then I learned about the Tower of Hanoi, and saw that it only made sense to
 solve it recursively.  Immediately, recursion went from a stupid (yet somehow
