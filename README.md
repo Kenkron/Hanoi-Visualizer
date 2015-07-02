@@ -17,7 +17,7 @@ For more information, run:
 Also, this program uses [pyglet](https://bitbucket.org/pyglet/pyglet/wiki/Home), which
 you'll need to install (`pip install pyglet`)
 
-Its features include:
+Features include:
 
  * Interactive Mode (where you move the pieces with a mouse)
  * CLI Mode (where your program plays for you via stdin)
@@ -26,13 +26,13 @@ Its features include:
  * Helpful help messages
  * Occasional documentation
 
-Its features may someday include:
+Features may someday include:
 
  * Less Multithreading (I didn't know what I was doing)
  * Animation
  * Ability to step through piped-in moves
 
-Its features do not include:
+Features do not include:
 
  * A program that solves Tower of Hanoi for you
 
