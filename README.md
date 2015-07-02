@@ -18,6 +18,7 @@ Features include:
 
  * Interactive Mode (where you move the pieces with a mouse)
  * CLI Mode (where your program plays for you via stdin)
+ * Ability to setp through piped-in moves
  * Customizable height
  * Decorative disk image
  * Helpful help messages
@@ -35,7 +36,6 @@ Features may someday include:
 
  * Less Multithreading (I didn't know what I was doing)
  * Animation
- * Ability to step through piped-in moves
 
 Features do not include:
 

@@ -23,6 +23,9 @@ OPTIONS:
 
     -f
         Forces execution, even when it will take longer than a minute
+
+    -d
+        Debug mode.  When running, step through stdin on every click, keypress
 """
 import sys
 import os
@@ -36,6 +39,8 @@ import time
 height=5
 #time between each move in stdin mdoe
 moveTime=1
+#debug for stdin mode, if true user must step through code manually
+debug=False
 
 class EmptyTowerException(Exception):
     """Error: Tried to remove a disk from and empty pillar"""
@@ -278,18 +283,30 @@ def runStdin():
             parseLine(instruction,board)
         bufferLock.release()
 
+    if debug:
+        @window.event
+        def on_mouse_press(x, y, button, modifiers):
+            check_for_input(0)
+
+        @window.event
+        def on_key_press(symbol, modifiers):
+            check_for_input(0)
+
     @window.event
     def on_draw():
         window.clear()
         label.draw()
         drawBoard(window, board, winx, 64)
-    pyglet.clock.schedule_interval(check_for_input, moveTime)
+    if not debug:
+        pyglet.clock.schedule_interval(check_for_input, moveTime)
     pyglet.app.event_loop.run()
 
 
 if "help" in sys.argv or "-help" in sys.argv or "--help" in sys.argv:
     print(__doc__)
 else:
+    if "-d" in sys.argv:
+        debug = True
     inputHeight=-1
     if "-h" in sys.argv:
         inputHeight=sys.argv.index("-h")
@@ -302,7 +319,7 @@ else:
         inputThread=StdinParser()
         inputThread.start()
         if timeToCompletion>60 and not "-f" in sys.argv:
-            print("Aboriting. This will take at least "+str(timeToCompletion)+
+            print("Aboriting. This may take over "+str(timeToCompletion)+
                   " seconds to complete. Use -f to force completion anyway.")
             inputBuffer=False
             sys.exit()
