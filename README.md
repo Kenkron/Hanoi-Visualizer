@@ -47,10 +47,10 @@ cryptic coding that newbies might not understand.
 
 Then I learned about the Tower of Hanoi, and saw that it only made sense to
 solve it recursively.  Immediately, recursion went from a stupid (yet somehow
-elietist) idea, to a technique that was elegant and important.
+elitist) idea, to a technique that was elegant and important.
 
 Because of this, when teaching other people about recursion, I want to use
-Tower of Hanoi as an illustration.  The problem is that Tower of Hanoi is
+Tower of Hanoi as an illustration.  The problem is, Tower of Hanoi is
 harder to explain than
 
     F(0)=1
