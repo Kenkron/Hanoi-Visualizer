@@ -27,14 +27,6 @@ import signal
     
 height=5
 
-def hanoi(height, callback, start, mid, end):
-    """Computes Hanoi Solution Recursively
-    
-    Args:
-    height: the height of this tower
-    callback: a callback funtion for making a move
-    start, mid, and end: represent the pillars"""
-
 class EmptyTowerException(Exception):
     """Error: Tried to remove a disk from and empty pillar"""
     def __init__(self, value):
@@ -248,8 +240,7 @@ class StdinParser(threading.Thread):
 def runStdin():
     """Runs tower of hanoi using input from stdin
 
-    this is so that a program can use the display
-    (this does not work yet)"""
+    this is so that a program can use the display"""
     global texture
     global grabbed
     global height
