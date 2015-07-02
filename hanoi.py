@@ -241,7 +241,7 @@ class StdinParser(threading.Thread):
         running = True
         while running:
             try:
-                instruction=raw_input()
+                instruction=sys.stdin.readline()
                 bufferLock.acquire()
                 if inputBuffer == False:
                     running = False
