@@ -46,12 +46,12 @@ If you want to change the height of the tower to 3 (5 by default):
 
     python hanoi.py -h 3
 
-Test a Tower of Hanoi solving Program:
---------------------------------------
+Test your own Tower of Hanoi solving Program:
+---------------------------------------------
 
 Your program will need to print solution instructions line by line.
 Each instruction must contain two numbers: a source, and a
-destination in that order.  Other characters don't matter,
+destination pillar in that order.  Other characters don't matter,
 so "move 0 to 2" == "0 to 2" == "02".  Note that the pillars are numbered
 0-2 from left to right.
 
