@@ -14,18 +14,18 @@ OPTIONS:
 
     -p
         Parse instructions from STDIN.  Each instruction must contain two numbers:
-        a source, and a destination in that order.  Other characters don't matter,
-        so "move 0 to 2" == "0 to 2" == "02".  Note that the pillars are numbered
-        0-2 from left to right.
+        a source, and a destination in that order. The pillars are numbered 0-2 from
+        left to right. A line starting with `#` is ignored. Other characters don't
+        matter, so "move 0 to 2" == "0 to 2" == "02".
 
     -t WAIT_TIME
-        Sets the delay between updates whan reading from STDIN (default 1)
+        Sets the delay between updates when reading from STDIN in seconds (default 1)
 
     -f
         Forces execution, even when it will take longer than a minute
 
     -d
-        Debug mode.  When running, step through stdin on every click, keypress
+        Debug mode.  When running, step through stdin on every click/keypress
 """
 import sys
 import os
@@ -87,7 +87,6 @@ class HanoiBoard:
                 "Tried to put larger disk on smaller disk\n"+
                 "    while moving disk of width "+str(disk)+
                 " to pillar "+str(i))
-
 
 def drawRect(win, color, x, y, w, h):
     verts = [ (x  , y+h),
@@ -307,31 +306,40 @@ def gracefulExit(signal, frame):
     bufferLock.release()
 signal.signal(signal.SIGINT, gracefulExit)
 
-if "help" in sys.argv or "-help" in sys.argv or "--help" in sys.argv:
-    print(__doc__)
-else:
-    if "-d" in sys.argv:
-        debug = True
-    inputHeight=-1
-    if "-h" in sys.argv:
-        inputHeight=sys.argv.index("-h")
-    if inputHeight>=0:
-        height=int(sys.argv[inputHeight+1])
-    if "-p" in sys.argv:
-        if "-t" in sys.argv:
-            moveTime=float(sys.argv[sys.argv.index("-t")+1])
-        timeToCompletion = moveTime*(2**height-1)
-        inputThread=StdinParser()
-        inputThread.start()
-        if timeToCompletion>60 and not "-f" in sys.argv:
-            print("Aboriting. This may take over "+str(timeToCompletion)+
-                  " seconds to complete. Use -f to force completion anyway.")
-            inputBuffer=False
-            sys.exit()
-        runStdin()
-        bufferLock.acquire()
-        inputBuffer=False
-        bufferLock.release()
-        print("Exiting Main Thread")
+def main():
+    global height
+    global moveTime
+    global debug
+    global bufferLock
+    global inputBuffer
+    if "help" in sys.argv or "-help" in sys.argv or "--help" in sys.argv:
+        print(__doc__)
     else:
-        runInteractive()
+        if "-d" in sys.argv:
+            debug = True
+            inputHeight=-1
+        if "-h" in sys.argv:
+            inputHeight=sys.argv.index("-h")
+        if inputHeight>=0:
+            height=int(sys.argv[inputHeight+1])
+        if "-p" in sys.argv:
+            if "-t" in sys.argv:
+                moveTime=float(sys.argv[sys.argv.index("-t")+1])
+            timeToCompletion = moveTime*(2**height-1)
+            if timeToCompletion>60 and not "-f" in sys.argv:
+                print("Aboriting. This may take over "+str(timeToCompletion)+
+                      " seconds to complete. Use -f to run.")
+                inputBuffer=False
+                sys.exit()
+            inputThread=StdinParser()
+            inputThread.start()
+            runStdin()
+            bufferLock.acquire()
+            inputBuffer=False
+            bufferLock.release()
+            print("Exiting Main Thread")
+        else:
+            runInteractive()
+
+if __name__ == "__main__":
+    main()

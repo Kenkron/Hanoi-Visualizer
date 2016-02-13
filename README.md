@@ -3,18 +3,20 @@ Tower of Hanoi Game
 
 This is a python visualization of 
 [Tower of Hanoi](https://en.wikipedia.org/wiki/Tower_of_Hanoi).
-In this game, there is a stack of disks on one of three pillars. The disks are 
-large at the bottom, and get smaller towards the top. The goal is to move the 
-disks to a different pillar following two rules:
 
-1. You may only move one disk at a time
-2. You may never put a larger disk on top of a smaller disk
+This program does not solve the Tower of hanoi problem, but it will:
 
-For more information, run:
+ * Let you play the game with a mouse
+ * Test your Tower of Hanoi solving program
+
+For details:
 
     python hanoi.py help
 
-Features include:
+This program uses [pyglet](https://bitbucket.org/pyglet/pyglet/wiki/Home), which
+you'll need to install (`pip install pyglet` in bash/powershell should do it)
+
+**Features include:**
 
  * Interactive Mode (where you move the pieces with a mouse)
  * CLI Mode (where your program plays for you via stdin)
@@ -22,24 +24,67 @@ Features include:
  * Customizable height
  * Decorative disk image
  * Helpful help messages
- * Occasional documentation
+ * Documentation
 
-If you have a program that prints instructions for solving Tower of Hanoi, 
-and you want to see it in action before your very eyes, now is your chance!
-
-    python my_awesome_hanoi_solver.py | python hanoi.py -p
-
-This program uses [pyglet](https://bitbucket.org/pyglet/pyglet/wiki/Home), which
-you'll need to install (`pip install pyglet` in bash/powershell should do it)
-
-Features may someday include:
+**Features may someday include:**
 
  * Less Multithreading (I didn't know what I was doing)
  * Animation
 
-Features do not include:
+**Features do not include:**
 
  * A program that solves Tower of Hanoi for you
+
+
+Play as a Human:
+----------------
+
+If you want to play the game as a human:
+
+    python hanoi.py
+
+If you want to change the height of the tower to 3 (5 by default):
+
+    python hanoi.py -h 3
+
+Test a Tower of Hanoi solving Program:
+--------------------------------------
+
+Your program will need to print solution instructions line by line.
+Each instruction must contain two numbers: a source, and a
+destination in that order.  Other characters don't matter,
+so "move 0 to 2" == "0 to 2" == "02".  Note that the pillars are numbered
+0-2 from left to right.
+
+Example output for solving `python hanoi.py -h 2`:
+
+    0 1
+    0 2
+    1 2
+
+If you want to see an animated test of your Tower of Hanoi solver:
+
+    python solver.py | hanoi.py -p
+
+If you want to make it spend 2.5 seconds on each move (1 sec by default):
+
+    python solver.py | hanoi.py -p -t 2.5
+
+If you want to move on each key press:
+
+    python solver.py | hanoi.py -p -d
+
+Note that you'll get a warning if you try to run a test that will take more than a minute:
+
+    python solver.py 12 | hanoi.py -p -h 12
+    Aboriting. This may take over 4095 seconds to complete. Use -f to run anyway.
+    
+But you can bypass this warning by adding `-f`:
+
+    python solver.py 12 | hanoi.py -p -h 12 -f
+    moving from 0 to 1
+    moving from 0 to 2
+    ...
 
 BUT WHY!?
 ---------
