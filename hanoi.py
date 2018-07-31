@@ -320,8 +320,8 @@ def main():
             inputHeight=-1
         if "-h" in sys.argv:
             inputHeight=sys.argv.index("-h")
-        if inputHeight>=0:
-            height=int(sys.argv[inputHeight+1])
+            if inputHeight>=0:
+                height=int(sys.argv[inputHeight+1])
         if "-p" in sys.argv:
             if "-t" in sys.argv:
                 moveTime=float(sys.argv[sys.argv.index("-t")+1])
