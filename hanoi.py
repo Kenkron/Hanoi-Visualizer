@@ -42,6 +42,12 @@ moveTime=1
 #debug for stdin mode, if true user must step through code manually
 debug=False
 
+#If this is python 2, change input to work like python 3
+try:
+    input = raw_input
+except NameError:
+    pass
+
 class EmptyTowerException(Exception):
     """Error: Tried to remove a disk from and empty pillar"""
     def __init__(self, value):
@@ -240,7 +246,7 @@ class StdinParser(threading.Thread):
         running = True
         while running:
             try:
-                instruction=raw_input()
+                instruction=input()
                 bufferLock.acquire()
                 if inputBuffer == False:
                     running = False
